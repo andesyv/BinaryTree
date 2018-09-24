@@ -51,14 +51,6 @@ public:
         Node<T>* nodeToDelete{search(data)};
         if (nodeToDelete != nullptr) {
 
-            Node<T>* parentNode{nullptr};
-            if (nodeToDelete->m_parent != nullptr) {
-               parentNode = nodeToDelete->m_parent;
-            } else {
-               // If the parent doesn't exist, it
-               // must mean that this is the root node.
-            }
-
             // Find the nodes right, most left node. This will be the new tree-root.
             Node<T>* newBase{nullptr};
             if (nodeToDelete->m_hSub != nullptr) {
@@ -68,13 +60,39 @@ public:
 
                 // Set the parents left to the root-nodes right
                 baseParent->m_vSub = newBase->m_hSub;
+                if (baseParent->m_vSub != nullptr) {
+                    baseParent->m_vSub->m_parent = baseParent;
+                }
+
                 // Set the left for the deleted node to be the left for the root-node.
                 newBase->m_vSub = nodeToDelete->m_vSub;
+                if (newBase->m_vSub != nullptr) {
+                    newBase->m_vSub->m_parent = newBase;
+                }
+
                 // Set the right for the deleted node to be the right for the root-node.
                 newBase->m_hSub = nodeToDelete->m_hSub;
+                if (newBase->m_hSub != nullptr) {
+                    newBase->m_hSub->m_parent = newBase;
+                }
+
+                if (nodeToDelete->m_parent != nullptr) {
+                    newBase->m_parent = nodeToDelete->m_parent; /// Only if nodeToDelete->m_parent is not nullptr!
+                } else {
+                    newBase->m_parent = nullptr;
+                }
             } else {
                 // What happens if there are no nodes on the
                 // right side of the node we want to delete?
+                if (nodeToDelete->m_vSub != nullptr) {
+                    if (nodeToDelete->m_parent != nullptr) {
+                        nodeToDelete->m_parent->m_hSub = nodeToDelete->m_vSub;
+                        nodeToDelete->m_vSub->m_parent = nodeToDelete->m_parent;
+                    } else {
+                        root = nodeToDelete->m_vSub;
+                        nodeToDelete->m_vSub->m_parent = nullptr;
+                    }
+                }
             }
 
         } else {
