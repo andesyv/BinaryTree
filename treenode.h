@@ -62,7 +62,7 @@ public:
         }
     }
 
-    Node<T>* search(T data, Node<T>* &parent) {
+    Node<T>* search(T data) {
         if (data == m_data) {
             return this;
         }
@@ -70,14 +70,12 @@ public:
             if (m_vSub == nullptr) {
                 return this;
             } else {
-                parent = this;
                 return m_vSub->search(data);
             }
         } else {
             if (m_hSub == nullptr) {
                 return this;
             } else {
-                parent = this;
                 return m_hSub->search(data);
             }
         }
@@ -103,10 +101,10 @@ public:
     }
 
     void intrav() {
-        if (m_vSub)
+        if (m_vSub != nullptr)
             m_vSub->intrav();
         std::cout << m_data << std::endl;
-        if (m_hSub) {
+        if (m_hSub != nullptr) {
             m_hSub->intrav();
         }
     }
