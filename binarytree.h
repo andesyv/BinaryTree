@@ -47,22 +47,33 @@ public:
     }
 
     void remove(T data) {
-        // 1. Search for the node before the one you want to remove
-        Node<T>* nodeToDelete{nullptr};
+        // Search for the node you want to remove
+        Node<T>* nodeToDelete{search(data)};
+        if (nodeToDelete != nullptr) {
 
-        // Find the node to delete
-        nodeToDelete = find(data);
-        // Find the nodes right, most left node. This will be the new tree-root.
-        Node<T>* newBase = nodeToDelete->m_hSub->findMostLeft();
-        // Also find the parent of that node.
-        Node<T>* overBase = newBase->parent;
+            Node<T>* parentNode{nullptr};
+            if (nodeToDelete->m_parent != nullptr) {
+               parentNode = nodeToDelete->m_parent;
+            } else {
+               // If the parent doesn't exist, it
+               // must mean that this is the root node.
+            }
 
-        // Set the parents left to the root-nodes right
-        overBase->m_vSub = newBase->m_hSub;
-        // Set the left for the deleted node to be the left for the root-node.
-        newBase->m_vSub = nodeToDelete->m_vSub;
-        // Set the right for the deleted node to be the right for the root-node.
-        newBase->m_hSub = nodeToDelete->m_hSub;
+            // Find the nodes right, most left node. This will be the new tree-root.
+            Node<T>* newBase = nodeToDelete->m_hSub->findMostLeft();
+            // Also find the parent of that node.
+            Node<T>* overBase = newBase->m_parent;
+
+            // Set the parents left to the root-nodes right
+            overBase->m_vSub = newBase->m_hSub;
+            // Set the left for the deleted node to be the left for the root-node.
+            newBase->m_vSub = nodeToDelete->m_vSub;
+            // Set the right for the deleted node to be the right for the root-node.
+            newBase->m_hSub = nodeToDelete->m_hSub;
+        } else {
+            // cannot find the node to delete. Abort
+        }
+
 
     }
 
