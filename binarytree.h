@@ -58,6 +58,10 @@ public:
             root->intrav();
     }
 
+    Node<T>* search(T data) {
+
+    }
+
     std::vector<T> toVector() {
         std::vector<T> v{};
         if (root != nullptr)

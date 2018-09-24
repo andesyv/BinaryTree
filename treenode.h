@@ -65,15 +65,24 @@ public:
             if (m_vSub == nullptr) {
                 return this;
             } else {
-                return m_vSub->insert(data);
+                return m_vSub->search(data);
             }
         } else {
             if (m_hSub == nullptr) {
                 return this;
             } else {
-                return m_hSub->insert(data);
+                return m_hSub->search(data);
             }
         }
+    }
+
+    Node<T>* searchBefore(T data) {
+        if (m_vSub->m_data == data || m_hSub->m_data == data) {
+            return this;
+        } else {
+
+        }
+
     }
 
     void intrav() {
