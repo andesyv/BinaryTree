@@ -13,8 +13,7 @@ class Node {
     template <class U>
     friend class BTree;
 
-private:   
-    // static unsigned int m_index;
+private:
     Node<T>* m_parent{nullptr};
     Node<T>* m_vSub{nullptr};
     Node<T>* m_hSub{nullptr};
@@ -41,10 +40,6 @@ public:
     ~Node() {
         // m_index--;
     }
-
-//    int getIndex() {
-//        return m_index;
-//    }
 
     void insert(const T &data) {
         if (data < m_data) {

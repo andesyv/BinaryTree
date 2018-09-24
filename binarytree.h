@@ -26,23 +26,6 @@ public:
             count++;
         } else {
             root->insert(data);
-            /*
-            if (data < root->m_data) {
-                if (root->m_vSub == nullptr) {
-                    root->m_vSub = new Node<T>{data};
-                    count++;
-                } else {
-                    root->m_vSub->insert(data);
-                }
-            } else {
-                if (root->m_hSub == nullptr) {
-                    root->m_hSub = new Node<T>{data};
-                    count++;
-                } else {
-                    root->m_hSub->insert(data);
-                }
-            }
-            */
         }
     }
 
@@ -55,7 +38,6 @@ public:
             Node<T>* newBase{nullptr};
             if (nodeToDelete->m_hSub != nullptr) {
                 newBase = nodeToDelete->m_hSub->findMostLeft();
-                std::cout << "Most left is: " << newBase->m_data << std::endl;
                 // Also find the parent of that node.
                 Node<T>* baseParent = newBase->m_parent; /// Should'nt need to check for nullptr here, as this is down in the tree.
 
@@ -63,21 +45,18 @@ public:
                 baseParent->m_vSub = newBase->m_hSub;
                 if (baseParent->m_vSub != nullptr) {
                     baseParent->m_vSub->m_parent = baseParent;
-                    std::cout << "baseParent->m_vSub: " << baseParent->m_vSub->m_data << std::endl;
                 }
 
                 // Set the left for the deleted node to be the left for the root-node.
                 newBase->m_vSub = nodeToDelete->m_vSub;
                 if (newBase->m_vSub != nullptr) {
                     newBase->m_vSub->m_parent = newBase;
-                    std::cout << "newBase->m_vSub: " << newBase->m_vSub->m_data << std::endl;
                 }
 
                 // Set the right for the deleted node to be the right for the root-node.
                 newBase->m_hSub = nodeToDelete->m_hSub;
                 if (newBase->m_hSub != nullptr) {
                     newBase->m_hSub->m_parent = newBase;
-                    std::cout << "newBase->m_hSub: " << newBase->m_hSub->m_data << std::endl;
                 }
 
                 if (nodeToDelete->m_parent != nullptr) {
@@ -89,7 +68,6 @@ public:
                 // Set the root, you idiot!
                 root = newBase;
             } else if (nodeToDelete->m_vSub != nullptr) {
-                std::cout << "No right side, going left!" << std::endl;
                 // What happens if there are no nodes on the
                 // right side of the node we want to delete?
 
