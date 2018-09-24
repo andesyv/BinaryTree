@@ -50,6 +50,7 @@ public:
         // search
         Node<T>* nodeToDelete{nullptr};
         Node<T>* nodeBefore{nullptr};
+
     }
 
     void intrav() {

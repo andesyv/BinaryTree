@@ -57,6 +57,25 @@ public:
         }
     }
 
+    Node<T>* search(T data) {
+        if (data == m_data) {
+            return this;
+        }
+        if (data < m_data) {
+            if (m_vSub == nullptr) {
+                return this;
+            } else {
+                return m_vSub->insert(data);
+            }
+        } else {
+            if (m_hSub == nullptr) {
+                return this;
+            } else {
+                return m_hSub->insert(data);
+            }
+        }
+    }
+
     void intrav() {
         if (m_vSub)
             m_vSub->intrav();
