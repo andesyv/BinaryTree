@@ -15,7 +15,7 @@ class Node {
 
 private:   
     // static unsigned int m_index;
-    Node<T>* parent{nullptr};
+    Node<T>* m_parent{nullptr};
     Node<T>* m_vSub{nullptr};
     Node<T>* m_hSub{nullptr};
 
@@ -31,7 +31,7 @@ public:
     T m_data{};
 public:
     // Default constructor
-    Node(T data = T{}) : m_data{data} {
+    Node(T data = T{}, Node<T>* parent = nullptr) : m_data{data}, m_parent{parent} {
         // m_index++;
     }
     ~Node() {
@@ -45,13 +45,13 @@ public:
     void insert(const T &data) {
         if (data < m_data) {
             if (m_vSub == nullptr) {
-                m_vSub = new Node<T>{data};
+                m_vSub = new Node<T>{data, this};
             } else {
                 m_vSub->insert(data);
             }
         } else {
             if (m_hSub == nullptr) {
-                m_hSub = new Node<T>{data};
+                m_hSub = new Node<T>{data, this};
             } else {
                 m_hSub->insert(data);
             }
