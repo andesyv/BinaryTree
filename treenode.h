@@ -15,6 +15,7 @@ class Node {
 
 private:   
     // static unsigned int m_index;
+    Node<T>* parent{nullptr};
     Node<T>* m_vSub{nullptr};
     Node<T>* m_hSub{nullptr};
 
@@ -57,7 +58,7 @@ public:
         }
     }
 
-    Node<T>* search(T data) {
+    Node<T>* search(T data, Node<T>* &parent) {
         if (data == m_data) {
             return this;
         }
@@ -65,24 +66,36 @@ public:
             if (m_vSub == nullptr) {
                 return this;
             } else {
+                parent = this;
                 return m_vSub->search(data);
             }
         } else {
             if (m_hSub == nullptr) {
                 return this;
             } else {
+                parent = this;
                 return m_hSub->search(data);
             }
         }
     }
 
     Node<T>* searchBefore(T data) {
-        if (m_vSub->m_data == data || m_hSub->m_data == data) {
-            return this;
-        } else {
-
+        if (m_vSub != nullptr) {
+            if (m_vSub->m_data == data) {
+                return this;
+            }
         }
-
+        if (m_hSub != nullptr) {
+            if (m_hSub->m_data == data) {
+                return this;
+            }
+        }
+        if (m_vSub != nullptr) {
+            m_vSub->searchBefore(data);
+        }
+        if (m_hSub != nullptr) {
+            m_hSub->searchBefore(data);
+        }
     }
 
     void intrav() {

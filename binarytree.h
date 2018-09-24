@@ -47,9 +47,22 @@ public:
     }
 
     void remove(T data) {
-        // search
+        // 1. Search for the node before the one you want to remove
         Node<T>* nodeToDelete{nullptr};
-        Node<T>* nodeBefore{nullptr};
+
+        // Find the node to delete
+        nodeToDelete = find(data);
+        // Find the nodes right, most left node. This will be the new tree-root.
+        Node<T>* newBase = nodeToDelete->m_hSub->findMostLeft();
+        // Also find the parent of that node.
+        Node<T>* overBase = newBase->parent;
+
+        // Set the parents left to the root-nodes right
+        overBase->m_vSub = newBase->m_hSub;
+        // Set the left for the deleted node to be the left for the root-node.
+        newBase->m_vSub = nodeToDelete->m_vSub;
+        // Set the right for the deleted node to be the right for the root-node.
+        newBase->m_hSub = nodeToDelete->m_hSub;
 
     }
 
@@ -58,8 +71,10 @@ public:
             root->intrav();
     }
 
-    Node<T>* search(T data) {
-
+    Node<T>* search(const T &data, Node<T>* &parent) {
+        if (root != nullptr) {
+            root->search(data, parent);
+        }
     }
 
     std::vector<T> toVector() {
