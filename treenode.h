@@ -27,6 +27,10 @@ private:
             m_hSub->addToVector(v);
         }
     }
+
+    Node<T>* findMostLeft() {
+        return (m_vSub != nullptr) ? m_vSub->findMostLeft() : this;
+    }
 public:
     T m_data{};
 public:

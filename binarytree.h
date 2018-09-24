@@ -62,10 +62,10 @@ public:
             // Find the nodes right, most left node. This will be the new tree-root.
             Node<T>* newBase = nodeToDelete->m_hSub->findMostLeft();
             // Also find the parent of that node.
-            Node<T>* overBase = newBase->m_parent;
+            Node<T>* baseParent = newBase->m_parent;
 
             // Set the parents left to the root-nodes right
-            overBase->m_vSub = newBase->m_hSub;
+            baseParent->m_vSub = newBase->m_hSub;
             // Set the left for the deleted node to be the left for the root-node.
             newBase->m_vSub = nodeToDelete->m_vSub;
             // Set the right for the deleted node to be the right for the root-node.
