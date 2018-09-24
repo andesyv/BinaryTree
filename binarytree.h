@@ -60,16 +60,23 @@ public:
             }
 
             // Find the nodes right, most left node. This will be the new tree-root.
-            Node<T>* newBase = nodeToDelete->m_hSub->findMostLeft();
-            // Also find the parent of that node.
-            Node<T>* baseParent = newBase->m_parent;
+            Node<T>* newBase{nullptr};
+            if (nodeToDelete->m_hSub != nullptr) {
+                nodeToDelete->m_hSub->findMostLeft();
+                // Also find the parent of that node.
+                Node<T>* baseParent = newBase->m_parent; /// Should'nt need to check for nullptr here, as this is down in the tree.
 
-            // Set the parents left to the root-nodes right
-            baseParent->m_vSub = newBase->m_hSub;
-            // Set the left for the deleted node to be the left for the root-node.
-            newBase->m_vSub = nodeToDelete->m_vSub;
-            // Set the right for the deleted node to be the right for the root-node.
-            newBase->m_hSub = nodeToDelete->m_hSub;
+                // Set the parents left to the root-nodes right
+                baseParent->m_vSub = newBase->m_hSub;
+                // Set the left for the deleted node to be the left for the root-node.
+                newBase->m_vSub = nodeToDelete->m_vSub;
+                // Set the right for the deleted node to be the right for the root-node.
+                newBase->m_hSub = nodeToDelete->m_hSub;
+            } else {
+                // What happens if there are no nodes on the
+                // right side of the node we want to delete?
+            }
+
         } else {
             // cannot find the node to delete. Abort
         }
