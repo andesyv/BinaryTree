@@ -42,6 +42,10 @@ public:
     }
 
     void insert(const T &data) {
+        if (data == m_data) {
+            std::cout << "Key already in tree!" << std::endl;
+            return;
+        }
         if (data < m_data) {
             if (m_vSub == nullptr) {
                 m_vSub = new Node<T>{data, this};

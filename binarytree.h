@@ -66,7 +66,7 @@ public:
                 }
 
                 // Set the root, you idiot!
-                root = newBase;
+                root = newBase; // NB: This should be the root as in the root that the removed
             } else if (nodeToDelete->m_vSub != nullptr) {
                 // What happens if there are no nodes on the
                 // right side of the node we want to delete?
