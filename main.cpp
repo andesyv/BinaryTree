@@ -54,9 +54,32 @@ int main()
     }
     */
 
-    std::stack<SmartNode<int>> workingStack{};
-
-    std::cout << "a_n = " << getLastQuantityInGeometricSeries(10) << std::endl;
+    std::stack<std::unique_ptr<SmartNode<int>>> workingStack{};
+    int nodesLeft = 10;
+    while (nodesLeft > 0) {
+        int nodesInCurrentRow = getLastQuantityInGeometricSeries(nodesLeft);
+        for (int i{0}; i < nodesInCurrentRow; i++) {
+            auto newNode = new SmartNode<int>();
+            if (!workingStack.empty()) {
+                newNode->m_vSub = std::move(workingStack.top());
+                workingStack.pop();
+            }
+            if (!workingStack.empty()) {
+                newNode->m_hSub = std::move(workingStack.top());
+                workingStack.pop();
+            }
+            workingStack.push(std::unique_ptr<SmartNode<int>>{newNode});
+        }
+        nodesLeft -= nodesInCurrentRow;
+        // Done making the first batch.
+    }
+    std::unique_ptr<SmartNode<int>> root{};
+    if (!workingStack.empty()) {
+        root = std::move(workingStack.top());
+    }
+    std::cout << "Hello, this is message!" << std::endl;
+    root = nullptr;
+    std::cout << "Hello, this is another message!" << std::endl;
 
 
     return 0;

@@ -15,10 +15,14 @@ public:
 
 public:
     SmartNode() {
-
+        std::cout << "Constructed!" << std::endl;
     }
     SmartNode(const T &data) : m_data{data} {
 
+    }
+
+    ~SmartNode() {
+        std::cout << "Destructed!" << std::endl;
     }
 };
 }
