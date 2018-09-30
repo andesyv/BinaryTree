@@ -18,12 +18,19 @@ public:
         : root{std::make_unique<SmartNode<T>>(data)} {
     }*/
 
+    void print() {
+        if (root) {
+            root.get()->print();
+        }
+    }
+
     void buildFromGround(int totalNodes) {
+        int index{0}; // Just to diffentiate the different nodes.
         std::stack<std::unique_ptr<SmartNode<int>>> workingStack{};
         while (totalNodes > 0) {
             int nodesInCurrentRow = getLastQuantityInGeometricSeries(totalNodes, 1, 2);
             for (int i{0}; i < nodesInCurrentRow; i++) {
-                auto newNode = new SmartNode<int>();
+                auto newNode = new SmartNode<int>(++index);
                 if (!workingStack.empty()) {
                     newNode->m_vSub = std::move(workingStack.top());
                     workingStack.pop();

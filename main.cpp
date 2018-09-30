@@ -82,8 +82,10 @@ int main()
     auto tree = std::make_unique<SmartBinaryTree<int>>();
     tree->buildFromGround(10);
     std::cout << "See! A message!" << std::endl;
+    tree.get()->print();
     tree->root = nullptr;
     std::cout << "See! Another message!" << std::endl;
+    tree.get()->print();
 
 
     return 0;
