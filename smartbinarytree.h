@@ -18,6 +18,22 @@ public:
         : root{std::make_unique<SmartNode<T>>(data)} {
     }*/
 
+    unsigned int countNodes() {
+        if (root) {
+            return root.get()->countNodesInternal();
+        } else {
+            return 0;
+        }
+    }
+
+    int countNodesByRef() {
+        int sum{0};
+        if (root) {
+            root.get()->countNodesByReference(sum);
+        }
+        return sum;
+    }
+
     void print() {
         if (root) {
             root.get()->print();

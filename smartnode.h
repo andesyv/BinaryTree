@@ -21,6 +21,23 @@ public:
         std::cout << "Constructed!" << std::endl;
     }
 
+    unsigned int countNodesInternal() {
+        return ((m_vSub) ? m_vSub.get()->countNodesInternal() : 0)
+            + ((m_hSub) ? m_hSub.get()->countNodesInternal() : 0)
+            + 1;
+    }
+
+    // More efficient?
+    void countNodesByReference(int &sumRef) {
+        if (m_vSub) {
+            m_vSub.get()->countNodesByReference(sumRef);
+        }
+        if (m_hSub) {
+            m_hSub.get()->countNodesByReference(sumRef);
+        }
+        sumRef++;
+    }
+
     void print() {
         if (m_vSub) {
             m_vSub.get()->print();

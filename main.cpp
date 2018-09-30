@@ -83,10 +83,11 @@ int main()
     tree->buildFromGround(10);
     std::cout << "See! A message!" << std::endl;
     tree.get()->print();
+    std::cout << "There are " << tree.get()->countNodes() << " nodes in the tree." << std::endl;
     tree->root = nullptr;
     std::cout << "See! Another message!" << std::endl;
     tree.get()->print();
-
+    std::cout << "There are " << tree.get()->countNodes() << " nodes in the tree." << std::endl;
 
     return 0;
 }
