@@ -26,6 +26,12 @@ public:
         }
     }
 
+    void printDepth() {
+        if (root) {
+            root.get()->printDepth(0);
+        }
+    }
+
     void print() {
         if (root) {
             root.get()->print();

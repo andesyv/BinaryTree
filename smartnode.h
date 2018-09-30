@@ -27,6 +27,17 @@ public:
             + 1;
     }
 
+    void printDepth(int depth) {
+        std::cout << std::string{""}.append(static_cast<unsigned int >(4 * depth), ' ')
+                  << m_data << std::endl;
+        if (m_vSub) {
+            m_vSub.get()->printDepth(depth + 1);
+        }
+        if (m_hSub) {
+            m_hSub.get()->printDepth(depth + 1);
+        }
+    }
+
     void print() {
         if (m_vSub) {
             m_vSub.get()->print();
