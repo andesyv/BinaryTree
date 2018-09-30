@@ -26,14 +26,6 @@ public:
         }
     }
 
-    int countNodesByRef() {
-        int sum{0};
-        if (root) {
-            root.get()->countNodesByReference(sum);
-        }
-        return sum;
-    }
-
     void print() {
         if (root) {
             root.get()->print();
