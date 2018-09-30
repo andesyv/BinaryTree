@@ -4,6 +4,7 @@
 #include "smartnode.h"
 #include <stack>
 #include <cmath>
+#include <limits>
 
 namespace DuckyTools{
 template <class T>
@@ -20,7 +21,7 @@ public:
     void buildFromGround(int totalNodes) {
         std::stack<std::unique_ptr<SmartNode<int>>> workingStack{};
         while (totalNodes > 0) {
-            int nodesInCurrentRow = getLastQuantityInGeometricSeries(totalNodes);
+            int nodesInCurrentRow = getLastQuantityInGeometricSeries(totalNodes, 1, 2);
             for (int i{0}; i < nodesInCurrentRow; i++) {
                 auto newNode = new SmartNode<int>();
                 if (!workingStack.empty()) {
@@ -41,8 +42,8 @@ public:
         }
     }
 
-    int getLastQuantityInGeometricSeries(int sum/*, int a_k, int k*/) { // Only works with a_k = 1 and k = 2. Could be rewritten to work with anything.
-
+    /// Calculates how many nodes there are going to be on the last step relative to how many nodes there are in total
+    static int getLastQuantityInGeometricSeries(int sum, float a1, float k) {
         /* Function to figure out how many nodes there are going to be on
          * each step relative to how many nodes there are in total.
          * Uses the formula of a geometric series
@@ -51,8 +52,15 @@ public:
          * (S_n = a1 * ((k^n - 1) / (k - 1)))
          * and std::ceil to figure this out.
          */
-        int S_n = static_cast<int>(std::pow(2, std::ceil(std::log(std::abs(sum + 1)) / std::log(double{2}))) - 1);
-        double a_n = static_cast<double>(std::pow(2.f, ((std::log(std::abs(S_n + 1))/std::log(static_cast<double>(2))) - 1)));
+
+        // Sum of a geometric series is not valid for k == 1, so just return 1.
+        if (k < (1 + std::numeric_limits<float>::epsilon()) && k > (1 - std::numeric_limits<float>::epsilon())) {
+            return 1;
+        }
+
+        float n_0 = (std::log(std::abs(sum * (k - 1) + a1)) - std::log(std::abs(a1)))/(std::log(std::abs(k)));
+        int S_n = static_cast<int>(a1 * ((std::pow(k, std::ceil(n_0)) - 1)/(k - 1)));
+        double a_n = static_cast<double>(a1 * std::pow(k, (std::ceil(n_0) - 1)));
         int diff = S_n - sum;
         return std::lround(a_n) - diff;
     }
