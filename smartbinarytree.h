@@ -5,6 +5,7 @@
 #include <stack>
 #include <cmath>
 #include <limits>
+#include <queue>
 
 namespace DuckyTools{
 template <class T>
@@ -40,20 +41,20 @@ public:
 
     void buildFromGround(int totalNodes) {
         int index{0}; // Just to diffentiate the different nodes.
-        std::stack<std::unique_ptr<SmartNode<int>>> workingStack{};
+        std::queue<std::unique_ptr<SmartNode<int>>> workingStack{};
         while (totalNodes > 0) {
             int nodesInCurrentRow = getLastQuantityInGeometricSeries(totalNodes, 1, 2);
-            std::stack<std::unique_ptr<SmartNode<int>>> newNodes{};
+            std::queue<std::unique_ptr<SmartNode<int>>> newNodes{};
 
             // Add new nodes on current layer.
             for (int i{0}; i < nodesInCurrentRow; i++) {
                 auto newNode = new SmartNode<int>(++index);
                 if (!workingStack.empty()) {
-                    newNode->m_vSub = std::move(workingStack.top());
+                    newNode->m_vSub = std::move(workingStack.front());
                     workingStack.pop();
                 }
                 if (!workingStack.empty()) {
-                    newNode->m_hSub = std::move(workingStack.top());
+                    newNode->m_hSub = std::move(workingStack.front());
                     workingStack.pop();
                 }
                 newNodes.push(std::unique_ptr<SmartNode<int>>{newNode});
@@ -64,7 +65,7 @@ public:
             totalNodes -= nodesInCurrentRow;
         }
         if (!workingStack.empty()) {
-            root = std::move(workingStack.top());
+            root = std::move(workingStack.front());
             workingStack.pop(); // just to keep the code clean.
         }
     }
