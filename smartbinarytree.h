@@ -43,6 +43,9 @@ public:
         std::stack<std::unique_ptr<SmartNode<int>>> workingStack{};
         while (totalNodes > 0) {
             int nodesInCurrentRow = getLastQuantityInGeometricSeries(totalNodes, 1, 2);
+            std::stack<std::unique_ptr<SmartNode<int>>> newNodes{};
+
+            // Add new nodes on current layer.
             for (int i{0}; i < nodesInCurrentRow; i++) {
                 auto newNode = new SmartNode<int>(++index);
                 if (!workingStack.empty()) {
@@ -53,8 +56,11 @@ public:
                     newNode->m_hSub = std::move(workingStack.top());
                     workingStack.pop();
                 }
-                workingStack.push(std::unique_ptr<SmartNode<int>>{newNode});
+                newNodes.push(std::unique_ptr<SmartNode<int>>{newNode});
             }
+
+            // Cleanup
+            workingStack = std::move(newNodes);
             totalNodes -= nodesInCurrentRow;
         }
         if (!workingStack.empty()) {
