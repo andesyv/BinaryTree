@@ -27,6 +27,14 @@ public:
         }
     }
 
+    unsigned int getDepth() {
+        if (root) {
+            return root.get()->getDepth(1);
+        } else {
+            return 0;
+        }
+    }
+
     void printDepth() {
         if (root) {
             root.get()->printDepth(0);
@@ -82,7 +90,7 @@ public:
          */
 
         // Sum of a geometric series is not valid for k == 1, so just return 1.
-        if (k < (1 + std::numeric_limits<float>::epsilon()) && k > (1 - std::numeric_limits<float>::epsilon())) {
+        if (std::abs(k) < (1 + std::numeric_limits<float>::epsilon())) {
             return 1;
         }
 

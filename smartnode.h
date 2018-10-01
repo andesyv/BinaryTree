@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <iostream>
+#include <algorithm>
 
 namespace DuckyTools{
 template <class T>
@@ -25,6 +26,13 @@ public:
         return ((m_vSub) ? m_vSub.get()->countNodesInternal() : 0)
             + ((m_hSub) ? m_hSub.get()->countNodesInternal() : 0)
             + 1;
+    }
+
+    unsigned int getDepth(unsigned int currentDepth) {
+        return std::max(
+                    (m_vSub) ? m_vSub.get()->getDepth(currentDepth + 1) : currentDepth,
+                    (m_hSub) ? m_hSub.get()->getDepth(currentDepth + 1) : currentDepth
+                        );
     }
 
     void printDepth(int depth) {
