@@ -19,6 +19,28 @@ public:
         : root{std::make_unique<SmartNode<T>>(data)} {
     }*/
 
+    void insert(const T &data) {
+        if (!root) {
+            root = std::make_unique<SmartNode<T>>(data);
+        } else {
+            root->insert(data);
+        }
+    }
+
+    // Preorder intraversal
+    void preIntrav() {
+        if (root) {
+            root.get()->preIntrav();
+        }
+    }
+
+    // Postorder intraversal
+    void postIntrav() {
+        if (root) {
+            root.get()->postIntrav();
+        }
+    }
+
     unsigned int countNodes() {
         if (root) {
             return root.get()->countNodesInternal();
@@ -58,6 +80,7 @@ public:
         }
     }
 
+    // Builds the tree from the ground up but with
     void buildFromGround(int totalNodes) {
         int index{0}; // Just to diffentiate the different nodes.
         std::queue<std::unique_ptr<SmartNode<int>>> workingStack{};

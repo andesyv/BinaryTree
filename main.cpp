@@ -63,16 +63,28 @@ int main()
 //    std::cout << "Hello, this is message!" << std::endl;
 //    root = nullptr;
 //    std::cout << "Hello, this is another message!" << std::endl;
-    auto tree = std::make_unique<SmartBinaryTree<int>>();
-    tree->buildFromGround(10);
+    SmartBinaryTree<int> tree{};
+    // tree.buildFromGround(10);
+
+    tree.insert(7);
+    tree.insert(5);
+    tree.insert(12);
+    tree.insert(5);
+    tree.insert(3);
+    tree.insert(9);
+
     std::cout << "See! A message!" << std::endl;
-    tree.get()->printDepth();
-    std::cout << "There are " << tree.get()->countNodes() << " nodes in the tree." << std::endl;
-    std::cout << "There is " << tree.get()->freeSpace() << " free spaces in the tree!" << std::endl;
-    tree->root = nullptr;
+    tree.printDepth();
+    std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;
+    std::cout << "There is " << tree.freeSpace() << " free space(s) in the tree!" << std::endl;
+    tree.preIntrav();
+    std::cout << "And then...  " << std::endl;
+    tree.postIntrav();
+
+    tree.root = nullptr;
     std::cout << "See! Another message!" << std::endl;
-    tree.get()->print();
-    std::cout << "There are " << tree.get()->countNodes() << " nodes in the tree." << std::endl;
+    tree.print();
+    std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;
 
     return 0;
 }
