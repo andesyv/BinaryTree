@@ -68,7 +68,7 @@ int main()
     std::cout << "See! A message!" << std::endl;
     tree.get()->printDepth();
     std::cout << "There are " << tree.get()->countNodes() << " nodes in the tree." << std::endl;
-    std::cout << "Depth is: " << tree.get()->getDepth() << std::endl;
+    std::cout << "There is " << tree.get()->freeSpace() << " free spaces in the tree!" << std::endl;
     tree->root = nullptr;
     std::cout << "See! Another message!" << std::endl;
     tree.get()->print();

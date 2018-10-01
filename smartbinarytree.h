@@ -35,6 +35,17 @@ public:
         }
     }
 
+    int capacity() {
+        /* This uses the function for the sum of a
+         * geometric series to calculate capacity.
+         */
+        return std::pow(2, getDepth()) - 1;
+    }
+
+    int freeSpace() {
+        return capacity() - countNodes();
+    }
+
     void printDepth() {
         if (root) {
             root.get()->printDepth(0);
