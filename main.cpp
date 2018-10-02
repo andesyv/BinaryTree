@@ -77,9 +77,9 @@ int main()
     tree.printDepth();
     std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;
     std::cout << "There is " << tree.freeSpace() << " free space(s) in the tree!" << std::endl;
-    tree.preIntrav();
+    tree.preTrav();
     std::cout << "And then...  " << std::endl;
-    tree.postIntrav();
+    tree.inTrav();
 
     tree.root = nullptr;
     std::cout << "See! Another message!" << std::endl;

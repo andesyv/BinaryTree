@@ -27,17 +27,24 @@ public:
         }
     }
 
-    // Preorder intraversal
-    void preIntrav() {
+    // Preorder traversal
+    void preTrav() {
         if (root) {
-            root.get()->preIntrav();
+            root.get()->preTrav();
         }
     }
 
-    // Postorder intraversal
-    void postIntrav() {
+    // Inorder traversal
+    void inTrav() {
         if (root) {
-            root.get()->postIntrav();
+            root.get()->inTrav();
+        }
+    }
+
+    // Postorder traversal
+    void postTrav() {
+        if (root) {
+            root.get()->postTrav();
         }
     }
 

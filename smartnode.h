@@ -43,23 +43,35 @@ public:
         }
     }
 
-    void preIntrav() {
+    void preTrav() {
         std::cout << m_data << std::endl;
 
         if (m_vSub) {
-            m_vSub.get()->preIntrav();
+            m_vSub.get()->preTrav();
         }
         if (m_hSub) {
-            m_hSub.get()->preIntrav();
+            m_hSub.get()->preTrav();
         }
     }
 
-    void postIntrav() {
+    void inTrav() {
         if (m_vSub) {
-            m_vSub.get()->postIntrav();
+            m_vSub.get()->postTrav();
+        }
+
+        std::cout << m_data << std::endl;
+
+        if (m_hSub) {
+            m_hSub.get()->postTrav();
+        }
+    }
+
+    void postTrav() {
+        if (m_vSub) {
+            m_vSub.get()->postTrav();
         }
         if (m_hSub) {
-            m_hSub.get()->postIntrav();
+            m_hSub.get()->postTrav();
         }
 
         std::cout << m_data << std::endl;
