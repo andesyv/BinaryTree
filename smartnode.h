@@ -53,43 +53,6 @@ public:
         }
     }
 
-    void remove(const T &data) {
-        // Search for the node to use
-
-        if (m_data == data) {
-            // Should do the remove on the node before, not the node that shall be removed.
-            // So if this is true, then this is the root.
-
-            // Do root deletion.
-        }
-
-        if (m_data < data) {
-            if (m_hSub) {
-                if (m_hSub->m_data == data) {
-                    // Match found, continue deleting.
-                    removeLeftOrRight(false);
-                } else {
-                    m_hSub->remove(data);
-                }
-            } else {
-                // The data to search for isn't in the tree. Abort.
-                return;
-            }
-        } else {
-            if (m_vSub) {
-                if (m_vSub->m_data == data) {
-                    // Match found, continue deleting.
-                    removeLeftOrRight(true);
-                } else {
-                    m_vSub->remove(data);
-                }
-            } else {
-                // The data to search for isn't in the tree. Abort.
-                return;
-            }
-        }
-    }
-
     SmartNode<T>* search(const T &data) {
         if (m_data == data) {
             return this;
@@ -108,9 +71,9 @@ public:
         }
     }
 
-    SmartNode<T>* findLeftSmallest() {
+    SmartNode<T>* findSmallest() {
         if (m_vSub) {
-            return m_vSub->findLeftSmallest();
+            return m_vSub->findSmallest();
         } else {
             return this;
         }
@@ -190,6 +153,45 @@ public:
     }
 
 private:
+    // Don't want anyone but the tree class to be able to remove, or they might delete the root and cause errors.
+    void remove(const T &data) {
+        // Search for the node to use
+
+        if (m_data == data) {
+            // Should do the remove on the node before, not the node that shall be removed.
+            // So if this is true, then this is the root.
+
+            // Root deletion is handled by the tree, so this is definetively an error.
+            throw std::runtime_error{"Root deletion activated on a node instead of on the tree"};
+        }
+
+        if (m_data < data) {
+            if (m_hSub) {
+                if (m_hSub->m_data == data) {
+                    // Match found, continue deleting.
+                    removeLeftOrRight(false);
+                } else {
+                    m_hSub->remove(data);
+                }
+            } else {
+                // The data to search for isn't in the tree. Abort.
+                return;
+            }
+        } else {
+            if (m_vSub) {
+                if (m_vSub->m_data == data) {
+                    // Match found, continue deleting.
+                    removeLeftOrRight(true);
+                } else {
+                    m_vSub->remove(data);
+                }
+            } else {
+                // The data to search for isn't in the tree. Abort.
+                return;
+            }
+        }
+    }
+
     void removeLeftOrRight(bool left) {
         /* At this point the function should be running on the parent of the
          * node that is going to be deleted, and "left" has been set to
@@ -254,13 +256,13 @@ private:
             throw std::logic_error{"removeWithTwoChildren() called on node without two children"};
         }
 
-        SmartNode<T> *smallestLeft{ (left ? m_vSub : m_hSub)->m_hSub->findLeftSmallest() };
+        SmartNode<T> *smallestRight{ (left ? m_vSub : m_hSub)->m_hSub->findSmallest() };
 
         // Swap the two nodes' values
-        std::swap((left ? m_vSub : m_hSub)->m_data, smallestLeft->m_data);
+        std::swap((left ? m_vSub : m_hSub)->m_data, smallestRight->m_data);
 
         // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 child)
-        smallestLeft->m_parent->removeLeftOrRight(smallestLeft->m_parent->m_vSub.get() == smallestLeft); // I did get to use the parent pointer afterall.
+        smallestRight->m_parent->removeLeftOrRight(smallestRight->m_parent->m_vSub.get() == smallestRight); // I did get to use the parent pointer afterall.
     }
 };
 }

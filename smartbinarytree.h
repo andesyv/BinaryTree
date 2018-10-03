@@ -29,38 +29,13 @@ public:
         }
     }
 
-    void removeRecursive(T data) {
+    void remove(T data) {
         if (root) {
             if (root->m_data == data) {
                 removeRoot();
             } else {
                 root->remove(data);
             }
-        }
-    }
-
-    // Iteratively deletes a node
-    void remove(T data) {
-        // search for node
-        SmartNode<T> *searchResult{(root) ? root->search(data) : nullptr};
-        if (searchResult == nullptr) {
-            // Node is not in the tree. Abort.
-            return;
-        }
-
-        // TODO: Add exception for removing the root.
-
-        // Check how many children the node have.
-        if (searchResult->m_vSub && searchResult->m_hSub) {
-            // If both children:
-            removeTwoChildrenEfficient(searchResult);
-
-        } else if (searchResult->m_vSub || searchResult->m_hSub) {
-            // If left or right children:
-            removeOneChildren(searchResult);
-        } else {
-            // If no children:
-            removeNoChildren(searchResult);
         }
     }
 
@@ -181,7 +156,18 @@ public:
 
 private:
     void removeRoot() {
-        // Run only when deleting the root node.
+        /* Run only when deleting the root node.
+         *
+         * I need to duplicate this code because when deleting
+         * a node the removal function runs on the node above,
+         * but if I delete the root the function needs to run
+         * on the tree instead. Most probably a better way to
+         * solve this, but atleast my node removal function
+         * is pretty straightforward and somewhat efficient.
+         *
+         * (Could also place the functions in the tree class
+         * and instantiate them on the individual nodes)
+         */
         if (root->m_vSub && root->m_hSub) {
             removeRootTwoChildren();
         } else if (root->m_vSub || root->m_hSub) {
@@ -210,47 +196,13 @@ private:
             throw std::logic_error{"removeRootTwoChildren called but root doesn't have two children."};
         }
 
-        SmartNode<T> *smallestLeft{ root->m_hSub->findLeftSmallest() };
+        SmartNode<T> *smallestRight{ root->m_hSub->findSmallest() };
 
         // Swap the two nodes' values
-        std::swap(root->m_data, smallestLeft->m_data);
+        std::swap(root->m_data, smallestRight->m_data);
 
         // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 or 0 children)
-        smallestLeft->m_parent->removeLeftOrRight(smallestLeft->m_parent->m_vSub.get() == smallestLeft); // I did get to use the parent pointer afterall.
-    }
-
-    void removeNoChildren(SmartNode<T> *nodeToDelete)
-    {
-        // Find out if it's the left or right child of the parent:
-        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
-            nodeToDelete->m_parent->m_vSub = nullptr; /// Smart pointers baby!!
-        } else {
-            nodeToDelete->m_parent->m_hSub = nullptr;
-        }
-    }
-
-    void removeOneChildren(SmartNode<T> *nodeToDelete) {
-        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub->m_parent : nodeToDelete->m_hSub->m_parent = nodeToDelete->m_parent; // set parent.
-
-        // Swap. This destroys the node that is up for deletion in the process.
-        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
-            nodeToDelete->m_parent->m_vSub = std::move(
-                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
-        } else {
-            nodeToDelete->m_parent->m_hSub= std::move(
-                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
-        }
-    }
-
-    // Removes a node with two children by swapping values instead of moving nodes. Easier to implement and also faster.
-    void removeTwoChildrenEfficient(SmartNode<T> *nodeToDelete) {
-        SmartNode<T> *smallestLeft{ nodeToDelete->m_hSub->findLeftSmallest() };
-
-        // Swap the two nodes' values
-        std::swap(nodeToDelete->m_data, smallestLeft->m_data);
-
-        // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 child)
-        remove(smallestLeft->m_data); // NB: This won't find the node because the tree is now unstructured. Need to do a remove on the actual node and not send in the data.
+        smallestRight->m_parent->removeLeftOrRight(smallestRight->m_parent->m_vSub.get() == smallestRight); // I did get to use the parent pointer afterall.
     }
 };
 }
