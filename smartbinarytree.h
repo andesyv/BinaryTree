@@ -36,8 +36,24 @@ public:
         }
 
         // Check how many children the node have.
+        if (searchResult->m_vSub && searchResult->m_hSub) {
+            // If both children:
 
-            //
+        } else if (searchResult->m_vSub) {
+            // If left children:
+
+        } else if (searchResult->m_hSub) {
+            // If right children:
+
+        } else {
+            // If no children:
+            // Find out if it's the left or right child of the parent:
+            if (searchResult->m_parent->m_vSub.get() == searchResult) {
+                searchResult->m_parent->m_vSub = nullptr; /// Smart pointers baby!!
+            } else {
+                searchResult->m_parent->m_hSub = nullptr;
+            }
+        }
     }
 
     // Preorder traversal

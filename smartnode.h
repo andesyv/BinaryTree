@@ -6,8 +6,15 @@
 #include <algorithm>
 
 namespace DuckyTools{
+
+template <class U>
+class SmartBinaryTree;
+
 template <class T>
 class SmartNode {
+
+    friend void SmartBinaryTree<T>::remove(T data); // Declare friend function that is allowed to see parent pointer.
+
 private:
     SmartNode<T> *m_parent{}; // Using a normal pointer here because of circular dependancy, and it's easier to assign.
 
