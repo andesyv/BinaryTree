@@ -10,29 +10,7 @@
 namespace DuckyTools{
 template <class T>
 class SmartBinaryTree {
-private:
-    void removeNoChildren(SmartNode<T> *nodeToDelete)
-    {
-        // Find out if it's the left or right child of the parent:
-        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
-            nodeToDelete->m_parent->m_vSub = nullptr; /// Smart pointers baby!!
-        } else {
-            nodeToDelete->m_parent->m_hSub = nullptr;
-        }
-    }
 
-    void removeOneChildren(SmartNode<T> *nodeToDelete) {
-        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub->m_parent : nodeToDelete->m_hSub->m_parent = nodeToDelete->m_parent; // set parent.
-
-        // Swap. This destroys the node that is up for deletion in the process.
-        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
-            nodeToDelete->m_parent->m_vSub = std::move(
-                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
-        } else {
-            nodeToDelete->m_parent->m_hSub= std::move(
-                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
-        }
-    }
 
 public:
     std::unique_ptr<SmartNode<T>> root{};
@@ -51,6 +29,7 @@ public:
         }
     }
 
+    // Iteratively deletes a node
     void remove(T data) {
         // search for node
         SmartNode<T> *searchResult{(root) ? root->search(data) : nullptr};
@@ -64,6 +43,7 @@ public:
         // Check how many children the node have.
         if (searchResult->m_vSub && searchResult->m_hSub) {
             // If both children:
+            removeTwoChildrenEfficient(searchResult);
 
         } else if (searchResult->m_vSub || searchResult->m_hSub) {
             // If left or right children:
@@ -187,6 +167,41 @@ public:
         double a_n = static_cast<double>(a1 * std::pow(k, (std::ceil(n_0) - 1)));
         int diff = S_n - sum;
         return std::lround(a_n) - diff;
+    }
+
+private:
+    void removeNoChildren(SmartNode<T> *nodeToDelete)
+    {
+        // Find out if it's the left or right child of the parent:
+        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
+            nodeToDelete->m_parent->m_vSub = nullptr; /// Smart pointers baby!!
+        } else {
+            nodeToDelete->m_parent->m_hSub = nullptr;
+        }
+    }
+
+    void removeOneChildren(SmartNode<T> *nodeToDelete) {
+        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub->m_parent : nodeToDelete->m_hSub->m_parent = nodeToDelete->m_parent; // set parent.
+
+        // Swap. This destroys the node that is up for deletion in the process.
+        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
+            nodeToDelete->m_parent->m_vSub = std::move(
+                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
+        } else {
+            nodeToDelete->m_parent->m_hSub= std::move(
+                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
+        }
+    }
+
+    // Removes a node with two children by swapping values instead of moving nodes. Easier to implement and also faster.
+    void removeTwoChildrenEfficient(SmartNode<T> *nodeToDelete) {
+        SmartNode<T> *smallestLeft{ nodeToDelete->m_hSub->findLeftSmallest() };
+
+        // Swap the two nodes' values
+        std::swap(nodeToDelete->m_data, smallestLeft->m_data);
+
+        // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 child)
+        remove(smallestLeft->m_data); // NB: This won't find the node because the tree is now unstructured. Need to do a remove on the actual node and not send in the data.
     }
 };
 }

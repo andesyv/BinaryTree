@@ -70,6 +70,14 @@ public:
         }
     }
 
+    SmartNode<T>* findLeftSmallest() {
+        if (m_vSub) {
+            return m_vSub->findLeftSmallest();
+        } else {
+            return this;
+        }
+    }
+
     void preTrav() {
         std::cout << m_data << std::endl;
 
