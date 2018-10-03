@@ -31,7 +31,11 @@ public:
 
     void removeRecursive(T data) {
         if (root) {
-            root->remove(data);
+            if (root->m_data == data) {
+                removeRoot();
+            } else {
+                root->remove(data);
+            }
         }
     }
 
@@ -176,6 +180,45 @@ public:
     }
 
 private:
+    void removeRoot() {
+        // Run only when deleting the root node.
+        if (root->m_vSub && root->m_hSub) {
+            removeRootTwoChildren();
+        } else if (root->m_vSub || root->m_hSub) {
+            removeRootOneChild();
+        } else {
+            removeRootNoChildren();
+        }
+    }
+
+    void removeRootNoChildren() {
+        root = nullptr;
+    }
+
+    void removeRootOneChild() {
+        if (root->m_vSub) {
+            root->m_vSub->m_parent = nullptr; // Set parent
+            root = std::move(root->m_vSub);
+        } else {
+            root->m_hSub->m_parent = nullptr; // Set parent
+            root = std::move(root->m_hSub);
+        }
+    }
+
+    void removeRootTwoChildren() {
+        if (!root->m_vSub && !root->m_hSub) {
+            throw std::logic_error{"removeRootTwoChildren called but root doesn't have two children."};
+        }
+
+        SmartNode<T> *smallestLeft{ root->m_hSub->findLeftSmallest() };
+
+        // Swap the two nodes' values
+        std::swap(root->m_data, smallestLeft->m_data);
+
+        // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 or 0 children)
+        smallestLeft->m_parent->removeLeftOrRight(smallestLeft->m_parent->m_vSub.get() == smallestLeft); // I did get to use the parent pointer afterall.
+    }
+
     void removeNoChildren(SmartNode<T> *nodeToDelete)
     {
         // Find out if it's the left or right child of the parent:

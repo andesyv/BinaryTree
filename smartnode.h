@@ -192,7 +192,7 @@ public:
 private:
     void removeLeftOrRight(bool left) {
         /* At this point the function should be running on the parent of the
-         * function that is going to be deleted, and "left" has been set to
+         * node that is going to be deleted, and "left" has been set to
          * either true or false.
          */
 
@@ -212,7 +212,7 @@ private:
     void removeWithNoChildren(bool left) {
         // Find out if it's the left or right child of the parent:
 
-        left ? m_vSub : m_hSub = nullptr; /// Smart pointers baby!!
+        (left ? m_vSub : m_hSub) = nullptr; /// Smart pointers baby!!
 
         /// (Wow, this was way easier than the last way of doing it)
     }
