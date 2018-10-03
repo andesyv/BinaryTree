@@ -52,6 +52,45 @@ public:
         }
     }
 
+    void remove(const T &data) {
+        // Search for the node to use
+
+        bool left{};
+
+        if (m_data == data) {
+            // Should do the remove on the node before, not the node that shall be removed.
+            // So if this is true, then this is the root.
+
+            // Do root deletion.
+        }
+
+        if (m_data < data) {
+            if (m_hSub) {
+                if (m_hSub->m_data == data) {
+                    // Match found, continue deleting.
+                    removeLeftOrRight(false);
+                } else {
+                    m_hSub->remove(data);
+                }
+            } else {
+                // The data to search for isn't in the tree. Abort.
+                return;
+            }
+        } else {
+            if (m_vSub) {
+                if (m_vSub->m_data == data) {
+                    // Match found, continue deleting.
+                    removeLeftOrRight(true);
+                } else {
+                    m_vSub->remove(data);
+                }
+            } else {
+                // The data to search for isn't in the tree. Abort.
+                return;
+            }
+        }
+    }
+
     SmartNode<T>* search(const T &data) {
         if (m_data == data) {
             return this;
@@ -149,6 +188,38 @@ public:
 
     ~SmartNode() {
         std::cout << "Destructed!" << std::endl;
+    }
+
+private:
+    void removeLeftOrRight(bool left) {
+        /* At this point the function should be running on the parent of the
+         * function that is going to be deleted, and "left" has been set to
+         * either true or false.
+         */
+
+        // Figure out what deletion method and do the deletion method:
+        if ((left ? m_vSub : m_hSub)->m_vSub && (left ? m_vSub : m_hSub)->m_hSub) {
+            // Node that is going to be deleted has two children:
+            removeWithTwoChildren();
+        } else if ((left ? m_vSub : m_hSub)->m_vSub || (left ? m_vSub : m_hSub)->m_hSub) {
+            // Node that is going to be deleted has 1 children:
+            removeWithOneChild();
+        } else {
+            // Node that is going to be deleted has no children:
+            removeWithNoChildren();
+        }
+    }
+
+    void removeWithNoChildren(bool left) {
+
+    }
+
+    void removeWithOneChild(bool left) {
+
+    }
+
+    void removeWithTwoChildren(bool left) {
+
     }
 };
 }
