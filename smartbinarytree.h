@@ -10,6 +10,30 @@
 namespace DuckyTools{
 template <class T>
 class SmartBinaryTree {
+private:
+    void removeNoChildren(SmartNode<T> *nodeToDelete)
+    {
+        // Find out if it's the left or right child of the parent:
+        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
+            nodeToDelete->m_parent->m_vSub = nullptr; /// Smart pointers baby!!
+        } else {
+            nodeToDelete->m_parent->m_hSub = nullptr;
+        }
+    }
+
+    void removeOneChildren(SmartNode<T> *nodeToDelete) {
+        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub->m_parent : nodeToDelete->m_hSub->m_parent = nodeToDelete->m_parent; // set parent.
+
+        // Swap. This destroys the node that is up for deletion in the process.
+        if (nodeToDelete->m_parent->m_vSub.get() == nodeToDelete) {
+            nodeToDelete->m_parent->m_vSub = std::move(
+                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
+        } else {
+            nodeToDelete->m_parent->m_hSub= std::move(
+                        (nodeToDelete->m_vSub) ? nodeToDelete->m_vSub : nodeToDelete->m_hSub);
+        }
+    }
+
 public:
     std::unique_ptr<SmartNode<T>> root{};
 
@@ -41,37 +65,12 @@ public:
         if (searchResult->m_vSub && searchResult->m_hSub) {
             // If both children:
 
-        } else if (searchResult->m_vSub) {
-            // If left children:
-
-            searchResult->m_vSub->m_parent = searchResult->m_parent; // set parent.
-
-            // Swap. This destroys the node that is up for deletion in the process.
-            if (searchResult->m_parent->m_vSub.get() == searchResult) {
-                searchResult->m_parent->m_vSub = std::move(searchResult->m_vSub);
-            } else {
-                searchResult->m_parent->m_hSub = std::move(searchResult->m_vSub);
-            }
-
-        } else if (searchResult->m_hSub) {
-            // If right children:
-
-            searchResult->m_hSub->m_parent = searchResult->m_parent; // set parent.
-
-            // Swap. This destroys the node that is up for deletion in the process.
-            if (searchResult->m_parent->m_vSub.get() == searchResult) {
-                searchResult->m_parent->m_vSub = std::move(searchResult->m_hSub);
-            } else {
-                searchResult->m_parent->m_hSub = std::move(searchResult->m_hSub);
-            }
+        } else if (searchResult->m_vSub || searchResult->m_hSub) {
+            // If left or right children:
+            removeOneChildren(searchResult);
         } else {
             // If no children:
-            // Find out if it's the left or right child of the parent:
-            if (searchResult->m_parent->m_vSub.get() == searchResult) {
-                searchResult->m_parent->m_vSub = nullptr; /// Smart pointers baby!!
-            } else {
-                searchResult->m_parent->m_hSub = nullptr;
-            }
+            removeNoChildren(searchResult);
         }
     }
 
