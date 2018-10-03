@@ -56,8 +56,6 @@ public:
     void remove(const T &data) {
         // Search for the node to use
 
-        bool left{};
-
         if (m_data == data) {
             // Should do the remove on the node before, not the node that shall be removed.
             // So if this is true, then this is the root.
@@ -201,13 +199,13 @@ private:
         // Figure out what deletion method and do the deletion method:
         if ((left ? m_vSub : m_hSub)->m_vSub && (left ? m_vSub : m_hSub)->m_hSub) {
             // Node that is going to be deleted has two children:
-            removeWithTwoChildren();
+            removeWithTwoChildren(left);
         } else if ((left ? m_vSub : m_hSub)->m_vSub || (left ? m_vSub : m_hSub)->m_hSub) {
             // Node that is going to be deleted has 1 children:
-            removeWithOneChild();
+            removeWithOneChild(left);
         } else {
             // Node that is going to be deleted has no children:
-            removeWithNoChildren();
+            removeWithNoChildren(left);
         }
     }
 
@@ -223,7 +221,7 @@ private:
 
         // Set parent (Not sure if I am going to need a parent pointer anymore)
         if (left) {
-            if (!m_vSub) { // Even some error handling! :o
+            if (!m_vSub) { /// Even some error handling! :o
                 throw std::logic_error{"Dereferencing a nullpointer"};
             }
 
@@ -252,7 +250,17 @@ private:
     }
 
     void removeWithTwoChildren(bool left) {
+        if (!m_vSub && !m_hSub) {
+            throw std::logic_error{"removeWithTwoChildren() called on node without two children"};
+        }
 
+        SmartNode<T> *smallestLeft{ (left ? m_vSub : m_hSub)->m_hSub->findLeftSmallest() };
+
+        // Swap the two nodes' values
+        std::swap((left ? m_vSub : m_hSub)->m_data, smallestLeft->m_data);
+
+        // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 child)
+        smallestLeft->m_parent->removeLeftOrRight(smallestLeft->m_parent->m_vSub.get() == smallestLeft); // I did get to use the parent pointer afterall.
     }
 };
 }

@@ -29,6 +29,12 @@ public:
         }
     }
 
+    void removeRecursive(T data) {
+        if (root) {
+            root->remove(data);
+        }
+    }
+
     // Iteratively deletes a node
     void remove(T data) {
         // search for node
