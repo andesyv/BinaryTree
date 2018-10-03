@@ -4,6 +4,7 @@
 #include <memory>
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 
 namespace DuckyTools{
 
@@ -211,11 +212,43 @@ private:
     }
 
     void removeWithNoChildren(bool left) {
+        // Find out if it's the left or right child of the parent:
 
+        left ? m_vSub : m_hSub = nullptr; /// Smart pointers baby!!
+
+        /// (Wow, this was way easier than the last way of doing it)
     }
 
     void removeWithOneChild(bool left) {
 
+        // Set parent (Not sure if I am going to need a parent pointer anymore)
+        if (left) {
+            if (!m_vSub) { // Even some error handling! :o
+                throw std::logic_error{"Dereferencing a nullpointer"};
+            }
+
+            if (m_vSub->m_vSub) {
+                m_vSub->m_vSub->m_parent = m_vSub->m_parent;
+            } else {
+                m_vSub->m_hSub->m_parent = m_vSub->m_parent;
+            }
+
+            // Swap. This destroys the node that is up for deletion in the process.
+            m_vSub = std::move((m_vSub->m_vSub) ? m_vSub->m_vSub : m_vSub->m_hSub);
+        } else {
+            if (!m_hSub) {
+                throw std::logic_error{"Dereferencing a nullpointer"};
+            }
+
+            if (m_hSub->m_vSub) {
+                m_hSub->m_vSub->m_parent = m_hSub->m_parent;
+            } else {
+                m_hSub->m_hSub->m_parent = m_hSub->m_parent;
+            }
+
+            // Swap. This destroys the node that is up for deletion in the process.
+            m_hSub = std::move((m_hSub->m_vSub) ? m_hSub->m_vSub : m_hSub->m_hSub);
+        }
     }
 
     void removeWithTwoChildren(bool left) {
