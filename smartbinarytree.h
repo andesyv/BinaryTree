@@ -27,6 +27,19 @@ public:
         }
     }
 
+    void remove(T data) {
+        // search for node
+        SmartNode<T> *searchResult{(root) ? root->search(data) : nullptr};
+        if (searchResult == nullptr) {
+            // Node is not in the tree. Abort.
+            return;
+        }
+
+        // Check how many children the node have.
+
+            //
+    }
+
     // Preorder traversal
     void preTrav() {
         if (root) {

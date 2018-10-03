@@ -20,6 +20,8 @@ public:
     SmartNode() {
         std::cout << "Constructed!" << std::endl;
     }
+
+
     SmartNode(const T &data) : m_data{data} {
         std::cout << "Constructed!" << std::endl;
     }
@@ -39,6 +41,24 @@ public:
                 m_vSub->insert(data);
             } else {
                 m_vSub = std::make_unique<SmartNode<T>>(data, this);
+            }
+        }
+    }
+
+    SmartNode<T>* search(const T &data) {
+        if (m_data == data) {
+            return this;
+        } else if (m_data < data) {
+            if (m_hSub) {
+                return m_hSub->search(data);
+            } else {
+                return nullptr;
+            }
+        } else {
+            if (m_vSub) {
+                return m_vSub->search(data);
+            } else {
+                return nullptr;
             }
         }
     }
