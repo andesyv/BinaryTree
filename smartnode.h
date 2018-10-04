@@ -18,12 +18,12 @@ class SmartNode {
 
 private:
     SmartNode<T> *m_parent{}; // Using a normal pointer here because of circular dependancy, and it's easier to assign.
-
-public:
     std::unique_ptr<SmartNode<T>> m_vSub{};
     std::unique_ptr<SmartNode<T>> m_hSub{};
     T m_data{};
 
+    // Something to consider including:
+    // bool deleted{false}; // A marker if the node is "deleted" - physically in the tree, but not counted.
 public:
     SmartNode() {
         std::cout << "Constructed!" << std::endl;
@@ -53,6 +53,12 @@ public:
         }
     }
 
+    /**
+     * Returns a pointer to the first occurence that matches data.
+     *
+     * @param data The data to search for
+     * @return Pointer to the first occurrence. Nullptr if none found
+     */
     SmartNode<T>* search(const T &data) {
         if (m_data == data) {
             return this;
@@ -92,13 +98,13 @@ public:
 
     void inTrav() {
         if (m_vSub) {
-            m_vSub.get()->postTrav();
+            m_vSub.get()->inTrav();
         }
 
         std::cout << m_data << std::endl;
 
         if (m_hSub) {
-            m_hSub.get()->postTrav();
+            m_hSub.get()->inTrav();
         }
     }
 
@@ -135,16 +141,6 @@ public:
         if (m_hSub) {
             m_hSub.get()->printDepth(depth + 1);
         }
-    }
-
-    void print() {
-        if (m_vSub) {
-            m_vSub.get()->print();
-        }
-        if (m_hSub) {
-            m_hSub.get()->print();
-        }
-        std::cout << m_data << std::endl;
     }
 
 

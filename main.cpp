@@ -68,9 +68,9 @@ int main()
 
     tree.insert(7);
     tree.insert(5);
+    tree.insert(5);
     tree.insert(6);
     tree.insert(12);
-    // tree.insert(5);
     tree.insert(3);
     tree.insert(9);
     tree.insert(1);
@@ -80,7 +80,10 @@ int main()
     tree.printDepth();
     std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;
     std::cout << "There is " << tree.freeSpace() << " free space(s) in the tree!" << std::endl;
-    tree.remove(7);
+    tree.inTrav();
+    tree.remove(5);
+    tree.inTrav();
+    tree.remove(5);
     tree.printDepth();
     std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;
     std::cout << "There is " << tree.freeSpace() << " free space(s) in the tree!" << std::endl;

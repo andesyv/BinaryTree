@@ -21,6 +21,7 @@ public:
         : root{std::make_unique<SmartNode<T>>(data)} {
     }*/
 
+    /// Inserts a node into the tree
     void insert(const T &data) {
         if (!root) {
             root = std::make_unique<SmartNode<T>>(data);
@@ -29,6 +30,7 @@ public:
         }
     }
 
+    /// Removes the first node that matches the data
     void remove(T data) {
         if (root) {
             if (root->m_data == data) {
@@ -60,6 +62,33 @@ public:
         }
     }
 
+    /// Returns true if tree is empty
+    bool empty() {
+        return (!root);
+    }
+
+    /// Empties the tree
+    void clear() {
+        if (root) {
+            root = nullptr;
+        }
+    }
+
+    /**
+     * Returns a pointer to the first occurence that matches data.
+     *
+     * @param data The data to search for
+     * @return Pointer to the first occurrence. Nullptr if none found
+     */
+    SmartNode<T>* search(const T &data) {
+        if (root) {
+            return root->search(data);
+        } else {
+            return nullptr;
+        }
+    }
+
+    /// Returns the number of nodes in the tree
     unsigned int countNodes() {
         if (root) {
             return root.get()->countNodesInternal();
@@ -68,6 +97,7 @@ public:
         }
     }
 
+    /// Returns the greatest depth of the tree.
     unsigned int getDepth() {
         if (root) {
             return root.get()->getDepth(1);
@@ -76,6 +106,7 @@ public:
         }
     }
 
+    /// Returns the capacity for the tree
     int capacity() {
         /* This uses the function for the sum of a
          * geometric series to calculate capacity.
@@ -83,19 +114,22 @@ public:
         return std::pow(2, getDepth()) - 1;
     }
 
+    /// Returns the available free space of the tree
     int freeSpace() {
         return capacity() - countNodes();
     }
 
+    /// Prints with the depth
     void printDepth() {
         if (root) {
             root.get()->printDepth(0);
         }
     }
 
+    /// The same as inTrav()
     void print() {
         if (root) {
-            root.get()->print();
+            root.get()->inTrav();
         }
     }
 
