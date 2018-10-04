@@ -85,17 +85,20 @@ public:
         }
     }
 
+    // Preorder traversal
     void preTrav() {
         std::cout << m_data << std::endl;
 
         if (m_vSub) {
             m_vSub.get()->preTrav();
         }
+
         if (m_hSub) {
             m_hSub.get()->preTrav();
         }
     }
 
+    // Inorder traversal
     void inTrav() {
         if (m_vSub) {
             m_vSub.get()->inTrav();
@@ -108,10 +111,12 @@ public:
         }
     }
 
+    // Postorder traversal
     void postTrav() {
         if (m_vSub) {
             m_vSub.get()->postTrav();
         }
+
         if (m_hSub) {
             m_hSub.get()->postTrav();
         }

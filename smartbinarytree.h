@@ -10,8 +10,6 @@
 namespace DuckyTools{
 template <class T>
 class SmartBinaryTree {
-
-
 public:
     std::unique_ptr<SmartNode<T>> root{};
 
