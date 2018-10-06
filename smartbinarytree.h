@@ -1,3 +1,8 @@
+/** A binary search tree that uses smartnodes
+ *
+ * @author andesyv
+ */
+
 #ifndef SMARTBINARYTREE_H
 #define SMARTBINARYTREE_H
 

@@ -7,7 +7,5 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    treenode.h \
-    binarytree.h \
     smartnode.h \
     smartbinarytree.h
