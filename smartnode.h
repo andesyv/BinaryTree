@@ -14,7 +14,7 @@ class SmartBinaryTree;
 template <class T>
 class SmartNode {
 
-    friend SmartBinaryTree<T>; // Declare friend function that is allowed to see parent pointer.
+    friend SmartBinaryTree<T>;
 
 private:
     SmartNode<T> *m_parent{}; // Using a normal pointer here because of circular dependancy, and it's easier to assign.
@@ -23,7 +23,7 @@ private:
     T m_data{};
 
     // Something to consider including:
-    // bool deleted{false}; // A marker if the node is "deleted" - physically in the tree, but not counted.
+    // bool deleted{false}; // A marker if the node is "deleted": physically in the tree, but not counted.
 public:
     SmartNode() {
         std::cout << "Constructed!" << std::endl;

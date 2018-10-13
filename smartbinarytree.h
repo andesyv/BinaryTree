@@ -20,6 +20,9 @@ public:
     std::unique_ptr<SmartNode<T>> root{};
 
 public:
+    bool autoBalance{true}; // Automaticly balance the tree while inserting?
+
+public:
     // Default constructor with initializer list
     SmartBinaryTree(const std::initializer_list<T> &list) {
         for (const auto &item : list) {
@@ -120,6 +123,54 @@ public:
     void clear() {
         if (root) {
             root = nullptr;
+        }
+    }
+
+    /** Rotates the subtree of the given node k2
+     *
+     * @param k2 The startnode of the subtree to rotate
+     * @param clockwise Whether to rotate clockwise or
+     * counter clockwise. Defaults to true
+     */
+    void rotate(std::unique_ptr<SmartNode<T>> &k2, bool clockwise = true) {
+        if (!k2) {
+            return;
+        }
+
+        if (clockwise) {
+            std::unique_ptr<SmartNode<T>> k1 = std::move(k2->m_vSub);
+
+            k2->m_vSub = std::move(k1->m_hSub);
+            k1->m_hSub = std::move(k2);
+
+            k2 = std::move(k1);
+        } else {
+            std::unique_ptr<SmartNode<T>> k1 = std::move(k2->m_hSub);
+
+            k2->m_hSub = std::move(k1->m_vSub);
+            k1->m_vSub = std::move(k2);
+
+            k2 = std::move(k1);
+        }
+    }
+
+    /** Performs a double rotation of the subtree
+     *
+     * @param k3 The startnode of the subtree to rotate
+     * @param clockwise Whether to rotate clockwise or
+     * counter clockwise. Defaults to true
+     */
+    void doubleRotate(std::unique_ptr<SmartNode<T>> &k3, bool clockwise = true) {
+        if (!k3) {
+            return;
+        }
+
+        if (clockwise) {
+            rotate(k3->m_vSub, false);
+            rotate(k3, true);
+        } else {
+            rotate(k3->m_hSub, true);
+            rotate(k3, false);
         }
     }
 
