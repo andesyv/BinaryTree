@@ -58,11 +58,11 @@ public:
             }
             if (!workingStack.empty()) {
                 std::cout << workingStack.top()->m_data << std::endl; // Print top item.
-                current = workingStack.top()->m_hSub.get(); // Set current pointer to point at top node on stack
+                current = workingStack.top()->m_hSub.get(); // Set current pointer to point at top nodes right on the stack
                 workingStack.pop(); // Pop top node off stack.
             }
 
-        } while (!workingStack.empty());
+        } while (!workingStack.empty() || current);
     }
 
     // Preorder traversal
