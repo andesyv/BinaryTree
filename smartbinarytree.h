@@ -11,6 +11,7 @@
 #include <cmath>
 #include <limits>
 #include <queue>
+#include <initializer_list>
 
 namespace DuckyTools{
 template <class T>
@@ -19,10 +20,12 @@ public:
     std::unique_ptr<SmartNode<T>> root{};
 
 public:
-    SmartBinaryTree() {}
-    /*SmartBinaryTree(const T &data)
-        : root{std::make_unique<SmartNode<T>>(data)} {
-    }*/
+    // Default constructor with initializer list
+    SmartBinaryTree(const std::initializer_list<T> &list) {
+        for (const auto &item : list) {
+            insert(item);
+        }
+    }
 
     /// Inserts a node into the tree
     void insert(const T &data) {
@@ -179,7 +182,7 @@ public:
         }
     }
 
-    // Builds the tree from the ground up but with
+    // Builds the tree from the ground up
     void buildFromGround(int totalNodes) {
         int index{0}; // Just to diffentiate the different nodes.
         std::queue<std::unique_ptr<SmartNode<int>>> workingStack{};
@@ -211,17 +214,24 @@ public:
         }
     }
 
-    /// Calculates how many nodes there are going to be on the last step relative to how many nodes there are in total
-    static int getLastQuantityInGeometricSeries(int sum, float a1, float k) {
-        /* Function to figure out how many nodes there are going to be on
-         * each step relative to how many nodes there are in total.
-         * Uses the formula of a geometric series
-         * (a_n = a1 * k^(n - 1)),
-         * the formula of the sum of a geometric series
-         * (S_n = a1 * ((k^n - 1) / (k - 1)))
-         * and std::ceil to figure this out.
-         */
-
+    /** Calculates the amount on the last step of geometric series
+     * when the total sum isn't equal to the sum of a geometric series.
+     *
+     * Can be used in a binary tree to find the number of nodes on the
+     * last level, if k = 2 and a1 = 1 (default).
+     *
+     * Uses the formula of a geometric series
+     * (a_n = a1 * k^(n - 1)),
+     * the formula of the sum of a geometric series
+     * (S_n = a1 * ((k^n - 1) / (k - 1)))
+     * and std::ceil to calculate this.
+     *
+     * @param sum The total sum. Should differ from sum of geometric series.
+     * @param a1 The first step. Defaults to 1.
+     * @param k The step for the geometric series. Defaults to 2.
+     * @return The amount on the last step of the series.
+     */
+    static int getLastQuantityInGeometricSeries(int sum, float a1 = 1.f, float k = 2.f) {
         // Sum of a geometric series is not valid for k == 1, so just return 1.
         if (std::abs(k) < (1 + std::numeric_limits<float>::epsilon())) {
             return 1;
