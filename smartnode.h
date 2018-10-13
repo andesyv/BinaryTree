@@ -130,7 +130,7 @@ public:
             + 1;
     }
 
-    unsigned int getDepth(unsigned int currentDepth) {
+    unsigned int getDepth(unsigned int currentDepth = 0) {
         return std::max(
                     (m_vSub) ? m_vSub.get()->getDepth(currentDepth + 1) : currentDepth,
                     (m_hSub) ? m_hSub.get()->getDepth(currentDepth + 1) : currentDepth

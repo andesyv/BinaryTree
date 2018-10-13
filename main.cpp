@@ -65,7 +65,7 @@ int main()
 //    std::cout << "Hello, this is another message!" << std::endl;
     // SmartBinaryTree<int> tree{};
     // tree.buildFromGround(10);
-    SmartBinaryTree<int> tree{7, 5, 6, 12, 3, 9, 1, 2};
+    SmartBinaryTree<int> tree{7, 5, 6, 12, 3, 9, 1, 2, 15, 1, 18, 8, 22, 13, -2};
 
     /*
     tree.insert(7);
@@ -84,8 +84,6 @@ int main()
     std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;
     std::cout << "There is " << tree.freeSpace() << " free space(s) in the tree!" << std::endl;
     // tree.inTrav();
-
-
 
     tree.printDepth();
     std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;

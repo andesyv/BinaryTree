@@ -36,6 +36,11 @@ public:
             root = std::make_unique<SmartNode<T>>(data);
         } else {
             root->insert(data);
+            /*
+            if (autoBalance) {
+                balance(root);
+            }
+            */
         }
     }
 
@@ -123,6 +128,41 @@ public:
     void clear() {
         if (root) {
             root = nullptr;
+        }
+    }
+
+    void balance(std::unique_ptr<SmartNode<T>> &t) {
+        if (!t) {
+            return;
+        }
+
+        if (t->m_vSub && t->m_hSub) {
+            if (t->m_vSub->getDepth() - t->m_hSub->getDepth() > 1) {
+                // Left subtree is over 2 or more deeper than right
+                if (t->m_vSub->m_vSub && t->m_vSub->m_hSub) {
+                    if (t->m_vSub->m_vSub->getDepth() >= t->m_vSub->m_hSub->getDepth()) {
+                        rotate(t, true);
+                    } else {
+                        doubleRotate(t, true);
+                    }
+                } else {
+                    return;
+                }
+            } else if (t->m_hSub->getDepth() - t->m_vSub->getDepth() > 1) {
+                // Right subtree is over 2 or more deeper than left
+                if (t->m_hSub->m_vSub && t->m_hSub->m_hSub) {
+                    if (t->m_hSub->m_vSub->getDepth() >= t->m_hSub->m_hSub->getDepth()) {
+                        rotate(t, true);
+                    } else {
+                        doubleRotate(t, true);
+                    }
+                } else {
+                    return;
+                }
+            }
+        } else {
+            // leftsub and/or rightsub of node doesn't exist. Return.
+            return;
         }
     }
 
