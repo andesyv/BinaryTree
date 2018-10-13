@@ -44,6 +44,27 @@ public:
         }
     }
 
+    // Iterative inorder traversal
+    void iterativeInTrav() {
+        std::stack<SmartNode<T>*> workingStack{};
+
+        SmartNode<T> *current{root.get()};
+
+        do {
+            while(current) {
+                workingStack.push(current);
+
+                current = current->m_vSub.get();
+            }
+            if (!workingStack.empty()) {
+                std::cout << workingStack.top()->m_data << std::endl; // Print top item.
+                current = workingStack.top()->m_hSub.get(); // Set current pointer to point at top node on stack
+                workingStack.pop(); // Pop top node off stack.
+            }
+
+        } while (!workingStack.empty());
+    }
+
     // Preorder traversal
     void preTrav() {
         if (root) {
