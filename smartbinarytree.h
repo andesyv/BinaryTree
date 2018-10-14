@@ -20,9 +20,6 @@ public:
     std::unique_ptr<SmartNode<T>> root{};
 
 public:
-    bool autoBalance{true}; // Automaticly balance the tree while inserting?
-
-public:
     // Default constructor with initializer list
     SmartBinaryTree(const std::initializer_list<T> &list) {
         for (const auto &item : list) {
@@ -36,11 +33,9 @@ public:
             root = std::make_unique<SmartNode<T>>(data);
         } else {
             root->insert(data);
-            /*
-            if (autoBalance) {
-                balance(root);
+            if (SmartNode<T>::AUTOBALANCE) {
+                SmartNode<T>::balance(root);
             }
-            */
         }
     }
 
@@ -131,88 +126,7 @@ public:
         }
     }
 
-    void balance(std::unique_ptr<SmartNode<T>> &t) {
-        if (!t) {
-            return;
-        }
 
-        if (t->m_vSub && t->m_hSub) {
-            if (t->m_vSub->getDepth() - t->m_hSub->getDepth() > 1) {
-                // Left subtree is over 2 or more deeper than right
-                if (t->m_vSub->m_vSub && t->m_vSub->m_hSub) {
-                    if (t->m_vSub->m_vSub->getDepth() >= t->m_vSub->m_hSub->getDepth()) {
-                        rotate(t, true);
-                    } else {
-                        doubleRotate(t, true);
-                    }
-                } else {
-                    return;
-                }
-            } else if (t->m_hSub->getDepth() - t->m_vSub->getDepth() > 1) {
-                // Right subtree is over 2 or more deeper than left
-                if (t->m_hSub->m_vSub && t->m_hSub->m_hSub) {
-                    if (t->m_hSub->m_vSub->getDepth() >= t->m_hSub->m_hSub->getDepth()) {
-                        rotate(t, true);
-                    } else {
-                        doubleRotate(t, true);
-                    }
-                } else {
-                    return;
-                }
-            }
-        } else {
-            // leftsub and/or rightsub of node doesn't exist. Return.
-            return;
-        }
-    }
-
-    /** Rotates the subtree of the given node k2
-     *
-     * @param k2 The startnode of the subtree to rotate
-     * @param clockwise Whether to rotate clockwise or
-     * counter clockwise. Defaults to true
-     */
-    void rotate(std::unique_ptr<SmartNode<T>> &k2, bool clockwise = true) {
-        if (!k2) {
-            return;
-        }
-
-        if (clockwise) {
-            std::unique_ptr<SmartNode<T>> k1 = std::move(k2->m_vSub);
-
-            k2->m_vSub = std::move(k1->m_hSub);
-            k1->m_hSub = std::move(k2);
-
-            k2 = std::move(k1);
-        } else {
-            std::unique_ptr<SmartNode<T>> k1 = std::move(k2->m_hSub);
-
-            k2->m_hSub = std::move(k1->m_vSub);
-            k1->m_vSub = std::move(k2);
-
-            k2 = std::move(k1);
-        }
-    }
-
-    /** Performs a double rotation of the subtree
-     *
-     * @param k3 The startnode of the subtree to rotate
-     * @param clockwise Whether to rotate clockwise or
-     * counter clockwise. Defaults to true
-     */
-    void doubleRotate(std::unique_ptr<SmartNode<T>> &k3, bool clockwise = true) {
-        if (!k3) {
-            return;
-        }
-
-        if (clockwise) {
-            rotate(k3->m_vSub, false);
-            rotate(k3, true);
-        } else {
-            rotate(k3->m_hSub, true);
-            rotate(k3, false);
-        }
-    }
 
     /**
      * Returns a pointer to the first occurence that matches data.
@@ -317,9 +231,9 @@ public:
      * (S_n = a1 * ((k^n - 1) / (k - 1)))
      * and std::ceil to calculate this.
      *
-     * @param sum The total sum. Should differ from sum of geometric series.
-     * @param a1 The first step. Defaults to 1.
-     * @param k The step for the geometric series. Defaults to 2.
+     * @param sum - The total sum. Should differ from sum of geometric series.
+     * @param a1 - The first step. Defaults to 1.
+     * @param k - The step for the geometric series. Defaults to 2.
      * @return The amount on the last step of the series.
      */
     static int getLastQuantityInGeometricSeries(int sum, float a1 = 1.f, float k = 2.f) {
