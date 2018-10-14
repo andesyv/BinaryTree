@@ -1,3 +1,9 @@
+/** A node class that uses smartpointers
+ * for use in the SmartBinaryTree-class.
+ *
+ * @author andesyv
+ */
+
 #ifndef SMARTNODE_H
 #define SMARTNODE_H
 
@@ -62,6 +68,12 @@ public:
         }
     }
 
+    /** A balancing function that balances out
+     * the tree from the specified node.
+     *
+     * @brief Balances out the tree
+     * @param t The subtree to balance
+     */
     static void balance(std::unique_ptr<SmartNode<T>> &t) {
         if (!t) {
             return;

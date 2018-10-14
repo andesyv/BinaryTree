@@ -126,8 +126,6 @@ public:
         }
     }
 
-
-
     /**
      * Returns a pointer to the first occurence that matches data.
      *
