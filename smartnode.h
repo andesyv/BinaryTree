@@ -377,6 +377,8 @@ private:
         // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 child)
         smallestRight->m_parent->removeLeftOrRight(smallestRight->m_parent->m_vSub.get() == smallestRight); // I did get to use the parent pointer afterall.
     }
+
+
 };
 }
 

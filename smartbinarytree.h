@@ -247,6 +247,58 @@ public:
         return std::lround(a_n) - diff;
     }
 
+
+    //////////////////////////////////////////////////
+
+    // Prints horizontal structure of tree
+
+    void SmartPrintTree(std::unique_ptr<SmartNode<T>> *root)
+    {
+            if (root == nullptr)
+            {
+                    return;
+            }
+
+            std::cout << root->get()->m_data << std::endl;
+            SmartPrintSubtree(&root, "");
+            std::cout << std::endl;
+    }
+    void SmartPrintSubtree(std::unique_ptr<SmartNode<T>> *root, const std::string& prefix)
+    {
+            if (root == nullptr || !(*root))
+            {
+                    return;
+            }
+
+            bool hasLeft = (root->m_vSub != nullptr);
+            bool hasRight = (root->m_hSub != nullptr);
+
+            if (!hasLeft && !hasRight)
+            {
+                    return;
+            }
+
+            std::cout << prefix;
+            std::cout << ((hasLeft  && hasRight) ? "├── " : "");
+            std::cout << ((!hasLeft && hasRight) ? "└── " : "");
+
+            if (hasRight)
+            {
+                    bool printStrand = (hasLeft && hasRight && (root->m_hSub->m_hSub != nullptr || root->m_hSub->m_vSub != nullptr));
+                    std::string newPrefix = prefix + (printStrand ? "│   " : "    ");
+                    std::cout << root->m_hSub->m_data << std::endl;
+                    SmartPrintSubtree(root->m_hSub, newPrefix);
+            }
+
+            if (hasLeft)
+            {
+                    std::cout << (hasRight ? prefix : "") << "└── " << root->m_vSub->m_data << std::endl;
+                    SmartPrintSubtree(root->m_vSub, prefix + "    ");
+            }
+    }
+    //////////////////////////////////////////////////
+
+
 private:
     void removeRoot() {
         /* Run only when deleting the root node.
@@ -297,6 +349,8 @@ private:
         // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 or 0 children)
         smallestRight->m_parent->removeLeftOrRight(smallestRight->m_parent->m_vSub.get() == smallestRight); // I did get to use the parent pointer afterall.
     }
+
+
 };
 }
 
