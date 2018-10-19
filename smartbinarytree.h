@@ -171,6 +171,17 @@ public:
         return capacity() - countNodes();
     }
 
+    /// A print with better visualization.
+    void visualDepthPrint()
+    {
+        if (root)
+        {
+            std::cout << root->m_data << std::endl;
+            root->visualDepthPrintSubtree();
+            std::cout << std::endl;
+        }
+    }
+
     /// Prints with the depth
     void printDepth() {
         if (root) {
@@ -246,58 +257,6 @@ public:
         int diff = S_n - sum;
         return std::lround(a_n) - diff;
     }
-
-
-    //////////////////////////////////////////////////
-
-    // Prints horizontal structure of tree
-
-    void SmartPrintTree(std::unique_ptr<SmartNode<T>> *root)
-    {
-            if (root == nullptr)
-            {
-                    return;
-            }
-
-            std::cout << root->get()->m_data << std::endl;
-            SmartPrintSubtree(&root, "");
-            std::cout << std::endl;
-    }
-    void SmartPrintSubtree(std::unique_ptr<SmartNode<T>> *root, const std::string& prefix)
-    {
-            if (root == nullptr || !(*root))
-            {
-                    return;
-            }
-
-            bool hasLeft = (root->m_vSub != nullptr);
-            bool hasRight = (root->m_hSub != nullptr);
-
-            if (!hasLeft && !hasRight)
-            {
-                    return;
-            }
-
-            std::cout << prefix;
-            std::cout << ((hasLeft  && hasRight) ? "├── " : "");
-            std::cout << ((!hasLeft && hasRight) ? "└── " : "");
-
-            if (hasRight)
-            {
-                    bool printStrand = (hasLeft && hasRight && (root->m_hSub->m_hSub != nullptr || root->m_hSub->m_vSub != nullptr));
-                    std::string newPrefix = prefix + (printStrand ? "│   " : "    ");
-                    std::cout << root->m_hSub->m_data << std::endl;
-                    SmartPrintSubtree(root->m_hSub, newPrefix);
-            }
-
-            if (hasLeft)
-            {
-                    std::cout << (hasRight ? prefix : "") << "└── " << root->m_vSub->m_data << std::endl;
-                    SmartPrintSubtree(root->m_vSub, prefix + "    ");
-            }
-    }
-    //////////////////////////////////////////////////
-
 
 private:
     void removeRoot() {
