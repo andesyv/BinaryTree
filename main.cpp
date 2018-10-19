@@ -31,6 +31,8 @@ int main()
     std::cout << "There are " << tree.countNodes() << " nodes in the tree." << std::endl;
     std::cout << "There is " << tree.freeSpace() << " free space(s) in the tree!" << std::endl;
 
+    tree.visualDepthPrint();
+
     /*
     tree.remove(5);
 

@@ -260,6 +260,32 @@ public:
         }
     }
 
+    /// Prints horizontal structure of tree with a cool visualization
+    void visualDepthPrintSubtree(const std::string& prefix = "")
+    {
+        if (!m_vSub && !m_hSub) {
+            return;
+        }
+
+        std::cout << prefix;
+
+        if (m_vSub && m_hSub) {
+            std::cout << "├── ";
+        } else if (m_hSub) {
+            std::cout << "└── ";
+        }
+
+        if (m_hSub) {
+            std::cout << m_data << std::endl;;
+
+            m_hSub->visualDepthPrintSubtree((m_vSub && (m_hSub->m_hSub || m_hSub->m_vSub)) ? "│   " : "    ");
+        }
+
+        if (m_vSub) {
+            std::cout << (m_hSub ? prefix : "") << "└── " << m_vSub->m_data << std::endl;
+            m_vSub->visualDepthPrintSubtree(prefix + "    ");
+        }
+    }
 
     ~SmartNode() {
         std::cout << "Destructed!" << std::endl;
@@ -377,6 +403,8 @@ private:
         // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 child)
         smallestRight->m_parent->removeLeftOrRight(smallestRight->m_parent->m_vSub.get() == smallestRight); // I did get to use the parent pointer afterall.
     }
+
+
 };
 }
 

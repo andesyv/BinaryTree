@@ -171,6 +171,17 @@ public:
         return capacity() - countNodes();
     }
 
+    /// A print with better visualization.
+    void visualDepthPrint()
+    {
+        if (root)
+        {
+            std::cout << root->m_data << std::endl;
+            root->visualDepthPrintSubtree();
+            std::cout << std::endl;
+        }
+    }
+
     /// Prints with the depth
     void printDepth() {
         if (root) {
@@ -297,6 +308,8 @@ private:
         // Remove the now switched node using one of the old deletion methods. (Because it will only have 1 or 0 children)
         smallestRight->m_parent->removeLeftOrRight(smallestRight->m_parent->m_vSub.get() == smallestRight); // I did get to use the parent pointer afterall.
     }
+
+
 };
 }
 
